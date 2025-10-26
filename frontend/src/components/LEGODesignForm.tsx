@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { api } from "../api";
+// no id, time of creation and img path
+import { NewDesignPayload } from "../interfaces/Design";
 
-interface OwnDesign {
-  title: string;
-  description: string;
-  tags: string;
-}
-
-export default function DesignForm() {
-  const [designData, setDesignData] = useState<OwnDesign>({
+export default function DesignForm( {onUploadSuccess}: {onUploadSuccess: () => void} ) {
+  const [designData, setDesignData] = useState<NewDesignPayload>({
     title: "",
     description: "",
     tags: ""
   });
   const [file, setFile] = useState<File | null>(null);
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,6 +23,7 @@ export default function DesignForm() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     // we need FormData for the file uploads
     const formData = new FormData();
     if(file) formData.append('image', file);
@@ -36,10 +32,13 @@ export default function DesignForm() {
     formData.append("tags", designData.tags);
 
     try {
-      const response = await api.post("/api/LEGOdesigns", formData, {
+      await api.post("/api/LEGOdesigns", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      console.log("Upload successful:", response.data);
+      onUploadSuccess();
+      setFile(null);
+      setDesignData({ title: "", description: "", tags: "" });
+
     } catch (error) {
       console.error("Upload failed:", error);
     }

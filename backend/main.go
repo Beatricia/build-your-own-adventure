@@ -1,21 +1,18 @@
 package main
 
 import (
+	// format (Println)
 	"fmt"
+	// http client/server implementations (ex: http.StatusOK)
 	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
+	// GIN - web framework for Go - easier to build APIs, web servers and backend apps (no manyal low level HTTP handling)
 	"github.com/gin-gonic/gin"
+	// for generating UUIDs (Universally Unique identifiers)
 	"github.com/google/uuid"
 )
-
-type DesignInput struct {
-	ImageURL    string `json:"imageURl" binding:"required,url"`
-	Title       string `json:"title" binding:"required,max=120"`
-	Description string `json:"description" binding:"required,max=2000"`
-	Tags        string `json:"tags" binding:"max=200"`
-}
 
 type Design struct {
 	ID          string    `json:"id"`
@@ -26,6 +23,7 @@ type Design struct {
 	Tags        string    `json:"tags"`
 }
 
+// in memory db -> should be switched to a database
 var designs = make([]Design, 0)
 
 func main() {
@@ -33,10 +31,16 @@ func main() {
 	// allow CORS for React dev server
 	r.Use(cors.Default())
 
+	// when someone looks for ..localhost:8080/uploads/... -> give them the backend/uploads folder
 	r.Static("/uploads", "./uploads")
 
+	// without GIN this would be more complicated to do
+	// it talks with the backend using JSON
 	r.POST("/api/LEGOdesigns", func(c *gin.Context) {
+		// reading the file from the Form data the client (front) sent
 		file, err := c.FormFile("image")
+		// nill -> nothing, no value (null, None)
+		// error is not nothing, so something went wrong
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": "Image file required",
@@ -51,12 +55,15 @@ func main() {
 			return
 		}
 
+		// Getting the other fields from the form
 		title := c.PostForm("title")
 		description := c.PostForm("description")
 		tags := c.PostForm("tags")
 
+		// any file saved in ./uploads can be accessed from the browser at: http://localhost:8080/uploads/<filename>
 		publicURL := fmt.Sprintf("http://localhost:8080/uploads/%s", file.Filename)
 
+		// creating the data model object
 		newDesign := Design{
 			ID:          uuid.NewString(),
 			CreatedAt:   time.Now().UTC(),
