@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// api is an axios state that talks with GO
 import { api } from "../api";
 // no id, time of creation and img path
 import { NewDesignPayload } from "../interfaces/Design";
@@ -22,7 +23,9 @@ export default function DesignForm( {onUploadSuccess}: {onUploadSuccess: () => v
     }
   };
 
+  // submitting the form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // preventing the browser to refresh the page on form submit
     e.preventDefault();
     // we need FormData for the file uploads
     const formData = new FormData();
