@@ -19,8 +19,7 @@
 4. Connect the frontend to the backend
   - when post is reached -> refresh the list in real time
   - think how to update the list visually in real time?
-5. Containerization
-  - dockerfile for frontend
-  - dockerfile for backend
-  - create the yml file
+5. Infrastructure
+  - Front S3 bucket
+  - Back EC2 instance running on the Go API
 6. Pipeline?
