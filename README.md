@@ -23,3 +23,17 @@
   - Front S3 bucket
   - Back EC2 instance running on the Go API
 6. Pipeline?
+
+
+## Actions & Commands
+
+| **Action**                            | **Command**                                                                                     |
+|-------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| Recreate everything                       | `terraform init`<br>`terraform apply`                                                                |
+| See URLs again                            | `terraform output`                                                                                  |
+| Redeploy React frontend                   | `cd frontend`<br>`REACT_APP_API_BASE="http://<EC2_PUBLIC_IP>:8080" npm run build`<br>`aws s3 sync build/ s3://build-your-own-adventure-frontend-bucket --delete` |
+| Destroy infrastructure                    | `terraform destroy`                                                                                 |
+| Redeploy Go backend                       | `terraform apply`                                                                                   |
+
+---
+
