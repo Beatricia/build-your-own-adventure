@@ -3,8 +3,7 @@
   /frontend (Reac and TypeScript)
   /backend (Go or ?)
   /infrastructure (if time left)
-2. Frontend (All done)
-  Form for uploading the LEGO set design:
+2. Frontend - Form for uploading the LEGO set design (All done):
   - Title
   - Image?
   - Description
