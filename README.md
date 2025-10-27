@@ -33,7 +33,6 @@
 | Redeploy React frontend                   | `cd frontend`<br>`REACT_APP_API_BASE="http://<EC2_PUBLIC_IP>:8080" npm run build`<br>`aws s3 sync build/ s3://build-your-own-adventure-frontend-bucket --delete` |
 | Destroy infrastructure                    | `terraform destroy`                                                                                 |
 | Redeploy Go backend                       | `terraform apply`                                                                                   |
-
 | Backend                                   | cd backend + go run .                                                                               |
 | Frontend                                  | cd frontend + npm start                                                                             |
 
