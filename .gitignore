@@ -27,3 +27,4 @@ override.tf.json
 # IDE/editor
 .vscode/
 .idea/
+.terraform/
