@@ -24,7 +24,24 @@ type Design struct {
 }
 
 // in memory db -> should be switched to a database
-var designs = make([]Design, 0)
+var designs = []Design{
+	{
+		ID:          uuid.NewString(),
+		CreatedAt:   time.Now().UTC(),
+		ImageURL:    "http://localhost:8080/uploads/castle.jpg",
+		Title:       "Castle Build",
+		Description: "A magical LEGO castle with towers and flags.",
+		Tags:        "#castle #lego #fantasy",
+	},
+	{
+		ID:          uuid.NewString(),
+		CreatedAt:   time.Now().UTC(),
+		ImageURL:    "http://localhost:8080/uploads/car.jpg",
+		Title:       "Race Car",
+		Description: "A sleek red race car for speed lovers.",
+		Tags:        "#car #race #speed",
+	},
+}
 
 func main() {
 	r := gin.Default()
