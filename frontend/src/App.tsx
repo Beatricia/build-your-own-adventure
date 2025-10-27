@@ -24,7 +24,7 @@ function App() {
   
   return (
     <div className='App'>
-      <h2>Build Your Own Adventure</h2>
+      <h2>Let's build your own adventure</h2>
       <DesignForm onUploadSuccess={fetchDesigns} />
 
       <DesignList designs={designs} />
