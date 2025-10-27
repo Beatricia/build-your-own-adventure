@@ -1,7 +1,7 @@
+// src/api.ts
 import axios from "axios";
 
+// use the current origin (https://<your-cloudfront-domain>)
 export const api = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE || "http://localhost:8080",
+  baseURL: window.location.origin,
 });
-
-console.log("API baseURL:", api.defaults.baseURL);

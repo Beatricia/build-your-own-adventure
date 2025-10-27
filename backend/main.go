@@ -5,6 +5,8 @@ import (
 	"fmt"
 	// http client/server implementations (ex: http.StatusOK)
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -60,8 +62,15 @@ func main() {
 		description := c.PostForm("description")
 		tags := c.PostForm("tags")
 
-		// any file saved in ./uploads can be accessed from the browser at: http://localhost:8080/uploads/<filename>
-		publicURL := fmt.Sprintf("http://localhost:8080/uploads/%s", file.Filename)
+		// at startup (ensure uploads dir exists)
+		_ = os.MkdirAll("./uploads", 0755)
+
+		base := strings.TrimRight(os.Getenv("BACKEND_BASE_URL"), "/")
+		// fallback for local dev
+		if base == "" {
+			base = "http://localhost:8080"
+		}
+		publicURL := fmt.Sprintf("%s/uploads/%s", base, file.Filename)
 
 		// creating the data model object
 		newDesign := Design{
