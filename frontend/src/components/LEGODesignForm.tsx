@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { api } from "../api";
 // no id, time of creation and img path
 import { NewDesignPayload } from "../interfaces/Design";
+import "./LEGODesignForm.css";
 
 export default function DesignForm( {onUploadSuccess}: {onUploadSuccess: () => void} ) {
   const [designData, setDesignData] = useState<NewDesignPayload>({
@@ -11,17 +12,20 @@ export default function DesignForm( {onUploadSuccess}: {onUploadSuccess: () => v
     tags: ""
   });
   const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDesignData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const selectedFile = e.target.files?.[0];
+  if (selectedFile) {
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile));
+  }
+};
 
   // submitting the form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,7 +36,13 @@ export default function DesignForm( {onUploadSuccess}: {onUploadSuccess: () => v
     if(file) formData.append('image', file);
     formData.append("title", designData.title);
     formData.append("description", designData.description);
-    formData.append("tags", designData.tags);
+    const formattedTags = designData.tags
+      .split(" ")
+      .filter(tag => tag.trim() !== "")
+      .map(tag => `#${tag}`)
+      .join(" ");
+
+    formData.append("tags", formattedTags);
 
     try {
       await api.post("/api/LEGOdesigns", formData, {
@@ -40,6 +50,7 @@ export default function DesignForm( {onUploadSuccess}: {onUploadSuccess: () => v
       });
       onUploadSuccess();
       setFile(null);
+      setPreview(null);
       setDesignData({ title: "", description: "", tags: "" });
 
     } catch (error) {
@@ -48,12 +59,49 @@ export default function DesignForm( {onUploadSuccess}: {onUploadSuccess: () => v
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="file" accept="image/*" onChange={handleFileChange} placeholder="Image URL" />
-      <input name="title" value={designData.title} onChange={handleChange} placeholder="Title" />
-      <input name="description" value={designData.description} onChange={handleChange} placeholder="Description" />
-      <input name="tags" value={designData.tags} onChange={handleChange} placeholder="Tags" />
-      <button type="submit">Submit</button>
+    <form className="design-form" onSubmit={handleSubmit}>
+      {/* LEFT: image preview + file input */}
+      <div className="left-section">
+        <div className="image-preview">
+          {preview ? <img src={preview} alt="preview" /> : <span>No image selected</span>}
+        </div>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+      </div>
+
+      {/* RIGHT: text fields + button */}
+      <div className="form-fields">
+        <div className="field-row">
+          <label>Title</label>
+          <input
+            name="title"
+            value={designData.title}
+            onChange={handleChange}
+            placeholder="Title"
+          />
+        </div>
+
+        <div className="field-row">
+          <label>Description</label>
+          <input
+            name="description"
+            value={designData.description}
+            onChange={handleChange}
+            placeholder="Description"
+          />
+        </div>
+
+        <div className="field-row">
+          <label>Tags</label>
+          <input
+            name="tags"
+            value={designData.tags}
+            onChange={handleChange}
+            placeholder="Tags"
+          />
+        </div>
+
+        <button className="lego-btn" type="submit">Submit</button>
+      </div>
     </form>
   );
 }

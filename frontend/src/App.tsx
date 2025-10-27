@@ -24,9 +24,9 @@ function App() {
   
   return (
     <div className='App'>
-      <h1>LEGO Design</h1>
+      <h2>Build Your Own Adventure</h2>
       <DesignForm onUploadSuccess={fetchDesigns} />
-      <hr />
+
       <DesignList designs={designs} />
     </div>
   );
