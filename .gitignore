@@ -9,3 +9,21 @@ backend/dist/
 # OS/editor
 .DS_Store
 .env
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform/
+.terraform.lock.hcl
+
+# IDE/editor
+.vscode/
+.idea/
