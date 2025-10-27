@@ -101,7 +101,7 @@ data "aws_ami" "amzn2" {
 # ec2 instance
 resource "aws_instance" "api" {
   ami                    = data.aws_ami.amzn2.id
-  instance_type          = "t2.micro"
+  instance_type          = "t3.small"
   vpc_security_group_ids = [aws_security_group.api_sg.id]
   key_name               = "lego-api-key"
 
@@ -111,10 +111,21 @@ resource "aws_instance" "api" {
     yum update -y
     yum install -y git golang
     mkdir -p /opt/app && cd /opt/app
-    git clone https://github.com/your-user/your-backend-repo.git app || true
-    cd app
-    /usr/bin/go build -o /usr/local/bin/lego-api
-    mkdir -p /opt/app/uploads
+    # get repo (public)
+    if [ ! -d build-your-own-adventure ]; then
+      git clone https://github.com/beatricia/build-your-own-adventure.git
+    cd build-your-own-adventure/backend
+
+    # build without VCS stamping (avoids git metadata lookup issues in CI/AMI)
+    /usr/bin/go env -w GOTOOLCHAIN=go1.25.3 || true
+    /usr/bin/go mod download || true
+    /usr/bin/go build -buildvcs=false -o /usr/local/bin/lego-api
+
+    # prep log file
+    touch /var/log/lego-api.log
+    chown ec2-user:ec2-user /var/log/lego-api.log
+
+    # run
     nohup /usr/local/bin/lego-api > /var/log/lego-api.log 2>&1 &
   EOF
 
