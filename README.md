@@ -35,5 +35,8 @@
 | Destroy infrastructure                    | `terraform destroy`                                                                                 |
 | Redeploy Go backend                       | `terraform apply`                                                                                   |
 
+| Backend                                   | cd backend + go run .                                                                                  |
+| Frontend                                  | cd frontend + npm start                                                                                   |
+
 ---
 
