@@ -1,8 +1,8 @@
 # build-your-own-adventure
 1. Create a repo and think of a structure  (All done)
-  /frontend (Reac and TypeScript)
-  /backend (Go or ?)
-  /infrastructure (if time left)
+- frontend (Reac and TypeScript)
+  - backend (Go ?)
+  - infrastructure (Terrform)
 2. Frontend - Form for uploading the LEGO set design (All done):
   - Title
   - Image?
